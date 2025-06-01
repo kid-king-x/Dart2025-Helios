@@ -1,0 +1,24 @@
+const express = require('express');
+const cors = require('cors');
+const config = require('./config');
+const fileRoutes = require('./routes/fileRoutes');
+const touchRoutes = require('./routes/touchRoutes');
+const stm32Routes = require('./routes/stm32Routes');
+const path = require('path');
+
+const app = express();
+
+// 中间件
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// 路由
+app.use('/file', fileRoutes);//file 的请求交由 fileRoutes 处理
+app.use('/touch', touchRoutes);//touch 的请求交由 touchRoutes 处理
+app.use('/stm32', stm32Routes);//stm32 的请求交由 stm32Routes 处理
+
+// 启动服务器
+app.listen(config.port, () => {
+    console.log(`Server running on http://localhost:${config.port}`);
+});
